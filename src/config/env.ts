@@ -16,4 +16,6 @@ function requireEnv(name: string): string {
 export const env = {
   PORT: process.env.PORT || 3000,
   DB_STRING: requireEnv("DB_CONNECTION"),
+  JWT_SECRET: requireEnv("JWT_SECRET"),
+  JWT_EXPIRES_IN: requireEnv("JWT_EXPIRES_IN"),
 };
