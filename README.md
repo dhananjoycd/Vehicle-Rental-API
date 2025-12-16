@@ -1,4 +1,4 @@
-# Project Name: Vehicle Rental API : [https://carrent-ds1k223n8-dhananjoycds-projects.vercel.app/](https://carrent-ds1k223n8-dhananjoycds-projects.vercel.app/)
+# Project Name: Vehicle Rental API : [https://carrentapi.vercel.app/](https://carrentapi.vercel.app/)
 
 A robust backend RESTful API for a Vehicle Rental System, built with performance and type-safety in mind.
 
@@ -47,4 +47,4 @@ API-te **Vehicle Management**-er jonne nicher operations gulo exist kore:
   - npm i bcrypt
   - npm i -D typescript ts-node-dev @types/express @types/node @types/bcrypt @types/jsonwebtoken
 
-  ### Live Demo: **API Link:** [https://carrent-ds1k223n8-dhananjoycds-projects.vercel.app/](https://carrent-ds1k223n8-dhananjoycds-projects.vercel.app/)
+  ### Live Demo: **API Link:** [https://carrentapi.vercel.app/](https://carrentapi.vercel.app/)
