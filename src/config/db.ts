@@ -38,16 +38,31 @@ export async function initDBConnection() {
 
     await pool.query(`
         CREATE TABLE IF NOT EXISTS bookings (
-        id SERIAL PRIMARY KEY,
-        customer_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-        vehicle_id INTEGER REFERENCES vehicles(id) ON DELETE CASCADE,
-        rent_start_date DATE NOT NULL,
-        rent_end_date DATE NOT NULL,
-        total_price NUMERIC(12,2) NOT NULL CHECK (total_price >= 0),
-        status VARCHAR(50) NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'cancelled', 'returned')),
-        created_at TIMESTAMP DEFAULT now(),
-        updated_at TIMESTAMP DEFAULT NOW()
-        ) `);
+    id SERIAL PRIMARY KEY,
+
+    customer_id INTEGER NOT NULL
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    vehicle_id INTEGER NOT NULL
+        REFERENCES vehicles(id)
+        ON DELETE CASCADE,
+
+    rent_start_date DATE NOT NULL,
+    rent_end_date DATE NOT NULL,
+
+    total_price NUMERIC(12,2) NOT NULL
+        CHECK (total_price >= 0),
+
+    status VARCHAR(50) NOT NULL DEFAULT 'active'
+        CHECK (status IN ('active', 'cancelled', 'returned')),
+
+    created_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP DEFAULT now(),
+
+    CHECK (rent_end_date > rent_start_date)
+    )
+ `);
   } catch (err) {
     console.error("DB Connection Error:", err);
   }

@@ -18,8 +18,15 @@ export const authorizeSelf = (
 ) => {
   const loggedUser = (req as any).user;
   const targetUserId = req.params.userId;
+  const customer_id = req.body?.customer_id;
 
-  if (loggedUser.role === "admin" || loggedUser.id === Number(targetUserId)) {
+  console.log(loggedUser.id, targetUserId);
+
+  if (
+    loggedUser.role === "admin" ||
+    loggedUser.id === Number(targetUserId) ||
+    loggedUser.id === customer_id
+  ) {
     return next();
   }
 

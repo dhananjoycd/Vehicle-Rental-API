@@ -5,6 +5,8 @@ import { env } from "./config/env";
 import { initDBConnection } from "./config/db";
 import authRoutes from "./modules/auth/auth.routes";
 import userRoutes from "./modules/users/users.routes";
+import vehicleRoutes from "./modules/vehicles/vehicle.route";
+import bookingRoutes from "./modules/bookings/booking.routes";
 
 const app = express();
 
@@ -19,8 +21,8 @@ initDBConnection();
 //CRUD operation : Root Routes Define
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
-// app.use('/api/v1/vehicles', vehicleRoutes);
-// app.use('/api/v1/bookings', bookingRoutes);
+app.use("/api/v1/vehicles", vehicleRoutes);
+app.use("/api/v1/bookings", bookingRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.status(200).json({
