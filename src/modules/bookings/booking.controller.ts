@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
-import { VehiclePayLoad } from "../vehicles/vehicle.type";
-import { createBookingDB } from "./booking.service";
+import {
+  createBookingDB,
+  getAllBookingsDB,
+  updateBookingDB,
+} from "./booking.service";
 import { CreateBooking } from "./booking.types";
+import { getVehicleByIdDB } from "../vehicles/vehicle.service";
 
 export const createBooking = async (req: Request, res: Response) => {
   try {
@@ -10,11 +14,18 @@ export const createBooking = async (req: Request, res: Response) => {
     };
 
     const booking = await createBookingDB(payload);
+    const carData = await getVehicleByIdDB(payload.vehicle_id);
 
     res.status(201).json({
       success: true,
       message: "Bookings created successfully",
-      data: booking,
+      data: {
+        ...booking,
+        vehicle: {
+          vehicle_name: carData[0].vehicle_name,
+          daily_rent_price: Number(carData[0].daily_rent_price),
+        },
+      },
     });
   } catch (error) {
     res.status(500).json({
@@ -24,71 +35,49 @@ export const createBooking = async (req: Request, res: Response) => {
     });
   }
 };
-/* 
-export const getAllVehicles = async (_req: Request, res: Response) => {
-  try {
-    const vehicles = await getAllVehiclesDB();
 
+export const getAllBookings = async (req: Request, res: Response) => {
+  const { id, role } = (req as any).user;
+  try {
+    const booking = await getAllBookingsDB(id, role);
     res.status(200).json({
       success: true,
-      message: vehicles.length
-        ? "Vehicles retrieved successfully"
-        : "No vehicles found",
-      data: vehicles,
+      message:
+        role === "admin"
+          ? "Bookings retrieved successfully"
+          : "Your bookings retrieved successfully",
+      data: booking,
     });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to retrieve vehicles",
-      error,
-    });
+  } catch (error: any) {
+    res.status(500).json({ status: "error", message: error.message });
   }
 };
 
-export const getVehicleById = async (req: Request, res: Response) => {
+export const updateBookings = async (req: Request, res: Response) => {
   try {
-    const vehicle = await getVehicleByIdDB(Number(req.params.vehicleId));
+    const { id, role } = (req as any).user;
+    const { status } = req.body;
+    const { bookingId } = req.params;
 
-    res.status(200).json({
+    const updatedBooking = await updateBookingDB(
+      Number(bookingId),
+      role,
+      status,
+      Number(id)
+    );
+
+    return res.status(200).json({
       success: true,
-      message: vehicle.length
-        ? "Vehicles retrieved successfully"
-        : "No vehicles found",
-      data: vehicle[0] || { ...vehicle },
+      message:
+        status === "returned"
+          ? "Booking marked as returned. Vehicle is now available"
+          : "Booking cancelled successfully",
+      data: updatedBooking,
     });
-  } catch (error) {
-    res.status(500).json({
+  } catch (error: any) {
+    return res.status(error.statusCode || 500).json({
       success: false,
-      message: "Failed to retrieve vehicle",
-      error,
+      message: error.message || "Internal server error",
     });
   }
 };
-
-export const updateVehicle = async (req: Request, res: Response) => {
-  try {
-    const payload: VehiclePayLoad = {
-      ...req.body,
-      daily_rent_price: Number(req.body.daily_rent_price),
-    };
-
-    const result = await updateVehicleDB(Number(req.params.vehicleId), payload);
-
-    console.log("Controller", result);
-
-    res.status(200).json({
-      success: true,
-      message: result.length
-        ? "Vehicles retrieved successfully"
-        : "No vehicles found",
-      data: result[0] || result,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to update vehicle",
-      error,
-    });
-  }
-};
- */

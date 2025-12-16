@@ -3,5 +3,5 @@ export interface VehiclePayLoad {
   type: "car" | "bike" | "van" | "SUV" | string;
   registration_number: string;
   daily_rent_price: number;
-  availability_status: "available" | "rented" | "maintenance" | string;
+  availability_status: "available" | string;
 }

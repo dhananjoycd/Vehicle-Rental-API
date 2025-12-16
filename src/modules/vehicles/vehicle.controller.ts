@@ -80,8 +80,6 @@ export const updateVehicle = async (req: Request, res: Response) => {
 
     const result = await updateVehicleDB(Number(req.params.vehicleId), payload);
 
-    console.log("Controller", result);
-
     res.status(200).json({
       success: true,
       message: result.length

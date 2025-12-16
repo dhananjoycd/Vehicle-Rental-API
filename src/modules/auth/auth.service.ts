@@ -7,7 +7,7 @@ import { env } from "../../config/env";
 const SALT_ROUNDS = 10;
 
 export async function signupUser(payload: SignupPayload) {
-  const { name, email, password, phone } = payload;
+  const { name, email, password, phone, role } = payload;
 
   // check existing user
   const existing = await pool.query("SELECT id FROM users WHERE email = $1", [
@@ -21,9 +21,9 @@ export async function signupUser(payload: SignupPayload) {
 
   const result = await pool.query(
     `INSERT INTO users (name, email, password, phone, role)
-     VALUES ($1, $2, $3, $4, 'customer')
+     VALUES ($1, $2, $3, $4, $5)
      RETURNING id, name, email, phone, role`,
-    [name, email.toLowerCase(), hashedPassword, phone]
+    [name, email.toLowerCase(), hashedPassword, phone, role]
   );
   return result.rows[0];
 }

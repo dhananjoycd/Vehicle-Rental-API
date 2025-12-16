@@ -13,9 +13,7 @@ export const BOOKING_QUERIES = {
   `,
 
   UPDATE_VEHICLE_STATUS: `
-    UPDATE vehicles
-    SET availability_status = $1
-    WHERE id = $2
+  UPDATE vehicles SET availability_status = 'booked' WHERE id = $1
   `,
 
   GET_ALL_BOOKINGS_ADMIN: `

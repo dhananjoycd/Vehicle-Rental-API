@@ -17,15 +17,33 @@ export const authorizeSelf = (
   next: NextFunction
 ) => {
   const loggedUser = (req as any).user;
-  const targetUserId = req.params.userId;
+  const targetUserId = req.params?.userId;
   const customer_id = req.body?.customer_id;
-
-  console.log(loggedUser.id, targetUserId);
 
   if (
     loggedUser.role === "admin" ||
     loggedUser.id === Number(targetUserId) ||
-    loggedUser.id === customer_id
+    loggedUser.id === Number(customer_id)
+  ) {
+    return next();
+  }
+
+  return res.status(403).json({
+    message: "You are not allowed to perform this action",
+  });
+};
+
+export const bookingAuthor = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const loggedUser = (req as any).user;
+  const customer_status = req.body?.status;
+
+  if (
+    loggedUser.role === "admin" ||
+    (loggedUser.role === "customer" && customer_status === "cancelled")
   ) {
     return next();
   }

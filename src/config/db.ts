@@ -9,8 +9,6 @@ export const pool = new Pool({
 // DB connection
 export async function initDBConnection() {
   try {
-    console.log(`Connected DB with neon`);
-
     await pool.query(`
         CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
